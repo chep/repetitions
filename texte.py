@@ -1,21 +1,24 @@
 
 from mot import Mot
+from PyQt6.QtGui import QTextCursor
 
 class Texte():
 	def __init__(self):
 		self.mots_ = list()
 
 	def analyse(self,
-				txt,
+				doc,
 				nbLettresCommunes = 4,
 				comparaison = 50,
 				maxProche = 150,
 				maxLoin = 1500,
 				ignore = list()):
+		cursor = QTextCursor(doc)
 		self.mots_ = list()
-		mots = txt.split()
-		for m in mots:
-			self.mots_.append(Mot(m))
+		while not cursor.atEnd():
+			cursor.select(QTextCursor.SelectionType.WordUnderCursor)
+			self.mots_.append(Mot(cursor.selectedText()))
+			cursor.movePosition(QTextCursor.MoveOperation.NextWord)
 
 		for index in range(len(self.mots_)):
 			pos = 1

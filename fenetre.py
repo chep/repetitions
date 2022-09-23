@@ -1,4 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtGui import QTextCursor, QTextBlockFormat, QTextCharFormat
+from PyQt6.QtCore import Qt
 
 from ui_fenetre import Ui_MainWindow
 from texte import Texte
@@ -11,24 +13,40 @@ class Fenetre(QMainWindow, Ui_MainWindow):
 		self.texte_ = Texte()
 
 	def clicAnalyser(self):
-		self.texte_.analyse(self.texte.toPlainText(),
+		document = self.texte.document()
+		format = QTextCharFormat()
+		format.setBackground(Qt.GlobalColor.white)
+		cursor = QTextCursor(document)
+		cursor.select(QTextCursor.SelectionType.Document)
+		cursor.setCharFormat(format)
+		cursor.clearSelection()
+		cursor.movePosition(QTextCursor.MoveOperation.Start)
+
+		self.texte_.analyse(document,
 							self.nbLettreRepetition.value(),
 							self.pourcentRepetition.value(),
 							self.distanceRepetition.value(),
 							self.distanceRepetitionLongue.value())
-		texte = self.texte.toPlainText()
-		motsBruts = texte.split()
+
 		mots = self.texte_.mots()
+		index = 0
 
-		position = 0
-		for index in range(len(mots)):
-			position += texte[position:].find(motsBruts[index])
+		while not cursor.atEnd():
+			cursor.select(QTextCursor.SelectionType.WordUnderCursor)
+			mot = cursor.selectedText()
+			if mot != mots[index].str():
+				print("Erreur, décalage: {} != {}".format(mot, mots[index].str()))
+
 			if mots[index].proche():
-				texte = texte[:position] + '<span style=\"background-color:#ffff00;\" >' + motsBruts[index] + "</span>" + texte[position+len(motsBruts[index]):]
+				format = QTextCharFormat()
+				format.setBackground(Qt.GlobalColor.yellow)
+				cursor.setCharFormat(format)
 			elif mots[index].loin():
-				texte = texte[:position] + '<span style=\"background-color:#00ff00;\" >' + motsBruts[index] + "</span>" + texte[position+len(motsBruts[index]):]
-			position += len(motsBruts[index])
+				format = QTextCharFormat()
+				format.setBackground(Qt.GlobalColor.green)
+				cursor.setCharFormat(format)
 
-		self.texte.clear()
-		self.texte.appendHtml(texte)
+			cursor.movePosition(QTextCursor.MoveOperation.NextWord)
+			index += 1
+
 
