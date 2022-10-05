@@ -21,20 +21,22 @@ class Texte():
 			cursor.movePosition(QTextCursor.MoveOperation.NextWord)
 
 		for index in range(len(self.mots_)):
-			pos = 1
-			nbLettres = 0
-			while index + pos < len(self.mots_) and nbLettres < maxLoin:
-				if self.mots_[index + pos] not in ignore and self.mots_[index + pos].match(self.mots_[index],
-																						   nbLettresCommunes,
-																						   comparaison):
-					self.mots_[index + pos].marque(nbLettres,
-												   maxProche,
-												   maxLoin)
-					self.mots_[index].marque(nbLettres,
-											 maxProche,
-											 maxLoin)
-				nbLettres += self.mots_[index + pos].taille()
-				pos += 1
+			if self.mots_[index].str() not in ignore:
+				pos = 1
+				nbLettres = 0
+				while index + pos < len(self.mots_) and nbLettres < maxLoin:
+					if (self.mots_[index + pos].str() not in ignore
+						    and self.mots_[index + pos].match(self.mots_[index],
+															  nbLettresCommunes,
+															  comparaison)):
+						self.mots_[index + pos].marque(nbLettres,
+													   maxProche,
+													   maxLoin)
+						self.mots_[index].marque(nbLettres,
+												 maxProche,
+												 maxLoin)
+					nbLettres += self.mots_[index + pos].taille()
+					pos += 1
 
 	def mots(self):
 		return self.mots_

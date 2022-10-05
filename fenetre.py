@@ -26,7 +26,8 @@ class Fenetre(QMainWindow, Ui_MainWindow):
 							self.nbLettreRepetition.value(),
 							self.pourcentRepetition.value(),
 							self.distanceRepetition.value(),
-							self.distanceRepetitionLongue.value())
+							self.distanceRepetitionLongue.value(),
+							self.ignore.toPlainText().split())
 
 		mots = self.texte_.mots()
 		index = 0
@@ -41,7 +42,7 @@ class Fenetre(QMainWindow, Ui_MainWindow):
 				format = QTextCharFormat()
 				format.setBackground(Qt.GlobalColor.yellow)
 				cursor.setCharFormat(format)
-			elif mots[index].loin():
+			elif mots[index].loin() >= self.occurrenceRepetitionLongue.value():
 				format = QTextCharFormat()
 				format.setBackground(Qt.GlobalColor.green)
 				cursor.setCharFormat(format)

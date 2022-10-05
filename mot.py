@@ -19,7 +19,8 @@ class Mot:
 		return self.loin_
 
 	def match(self, mot, nbLettresCommunes, comparaison):
-		if len(self.str_) < nbLettresCommunes or len(mot.str()) < nbLettresCommunes:
+		if (len(self.str_) < nbLettresCommunes
+			    or len(mot.str()) < nbLettresCommunes):
 			return False
 
 		maxT = max(self.taille(), mot.taille())
@@ -56,7 +57,7 @@ class Mot:
 	def marque(self, nbLettres, maxProche, maxLoin):
 		if nbLettres <= maxProche:
 			self.proche_ = True
-		self.loin_ = True
+		self.loin_ += 1
 
 	def print(self):
 		print(self.str_ + " {} {}".format(self.proche_, self.loin_))
