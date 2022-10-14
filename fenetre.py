@@ -10,17 +10,20 @@ class Fenetre(QMainWindow, Ui_MainWindow):
 		super(Fenetre, self).__init__()
 		self.setupUi(self)
 		self.analyser.clicked.connect(self.clicAnalyser)
+		self.rechercher.clicked.connect(self.clicRechercher)
 		self.texte_ = Texte()
 
-	def clicAnalyser(self):
+	def clear(self):
 		document = self.texte.document()
 		format = QTextCharFormat()
 		format.setBackground(Qt.GlobalColor.white)
 		cursor = QTextCursor(document)
 		cursor.select(QTextCursor.SelectionType.Document)
 		cursor.setCharFormat(format)
-		cursor.clearSelection()
-		cursor.movePosition(QTextCursor.MoveOperation.Start)
+
+	def clicAnalyser(self):
+		self.clear()
+		document = self.texte.document()
 
 		self.texte_.analyse(document,
 							self.nbLettreRepetition.value(),
@@ -28,7 +31,12 @@ class Fenetre(QMainWindow, Ui_MainWindow):
 							self.distanceRepetition.value(),
 							self.distanceRepetitionLongue.value(),
 							self.ignore.toPlainText().split())
+		self.maj()
 
+	def maj(self):
+		document = self.texte.document()
+		cursor = QTextCursor(document)
+		cursor.movePosition(QTextCursor.MoveOperation.Start)
 		mots = self.texte_.mots()
 		index = 0
 
@@ -50,4 +58,15 @@ class Fenetre(QMainWindow, Ui_MainWindow):
 			cursor.movePosition(QTextCursor.MoveOperation.NextWord)
 			index += 1
 
+
+	def clicRechercher(self):
+		self.clear()
+		document = self.texte.document()
+		self.texte_.cherche(self.motCherche.text(),
+							document,
+							self.nbLettreRepetition.value(),
+							self.pourcentRepetition.value(),
+							self.distanceRepetition.value(),
+							self.distanceRepetitionLongue.value())
+		self.maj()
 
