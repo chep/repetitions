@@ -49,13 +49,14 @@ class Texte():
                 maxProche=150,
                 maxLoin=1500):
         cursor = QTextCursor(doc)
+        mot = mot.lower()
         self.mots_ = list()
         while not cursor.atEnd():
             cursor.select(QTextCursor.SelectionType.WordUnderCursor)
             self.mots_.append(Mot(cursor.selectedText()))
             cursor.movePosition(QTextCursor.MoveOperation.NextWord)
         for index in range(len(self.mots_)):
-            if self.mots_[index].str() == mot:
+            if self.mots_[index].strLow() == mot:
                 pos = 1
                 nbLettres = 0
                 while index + pos < len(self.mots_) and nbLettres < maxLoin:

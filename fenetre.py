@@ -44,9 +44,9 @@ class Fenetre(QMainWindow, Ui_MainWindow):
         while not cursor.atEnd():
             cursor.select(QTextCursor.SelectionType.WordUnderCursor)
             mot = cursor.selectedText()
-            if mot != mots[index].str():
+            if mot != mots[index].strPrint():
                 print("Erreur, décalage: {} != {}".format(
-                    mot, mots[index].str()))
+                    mot, mots[index].strPrint()))
 
             if mots[index].proche():
                 format = QTextCharFormat()
