@@ -3,6 +3,7 @@
 class Mot:
 	def __init__(self, mot):
 		self.str_ = mot;
+		self.strLow_ = mot.lower();
 		self.proche_ = False
 		self.loin_ = False
 
@@ -11,6 +12,9 @@ class Mot:
 
 	def str(self):
 		return self.str_
+
+	def strLow(self):
+		return self.strLow_
 
 	def proche(self):
 		return self.proche_

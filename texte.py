@@ -20,12 +20,14 @@ class Texte():
 			self.mots_.append(Mot(cursor.selectedText()))
 			cursor.movePosition(QTextCursor.MoveOperation.NextWord)
 
+		ignore = [x.lower() for x in ignore]
+
 		for index in range(len(self.mots_)):
-			if self.mots_[index].str() not in ignore:
+			if self.mots_[index].strLow() not in ignore:
 				pos = 1
 				nbLettres = 0
 				while index + pos < len(self.mots_) and nbLettres < maxLoin:
-					if (self.mots_[index + pos].str() not in ignore
+					if (self.mots_[index + pos].strLow() not in ignore
 						    and self.mots_[index + pos].match(self.mots_[index],
 															  nbLettresCommunes,
 															  comparaison)):
